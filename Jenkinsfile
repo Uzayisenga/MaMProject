@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git 'https://github.com/YOUR_USERNAME/zephyr-cucumber-demo.git'
+        git 'https://github.com/Uzayisenga/MaMProject.git'
       }
     }
     stage('Build and Test') {

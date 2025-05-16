@@ -8,12 +8,12 @@ pipeline {
     }
     stage('Build and Test') {
       steps {
-        sh 'mvn test'
+        bat 'mvnw test' 
       }
     }
     stage('Upload to Zephyr') {
       steps {
-        sh './upload-to-zephyr.sh'
+        bat './upload-to-zephyr.sh'
       }
     }
   }

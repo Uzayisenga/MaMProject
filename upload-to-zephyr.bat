@@ -1,4 +1,6 @@
 @echo off
+setlocal enabledelayedexpansion
+
 echo Uploading report to Zephyr...
 
 REM Look for the JUnit XML
@@ -7,11 +9,11 @@ for %%f in (target\surefire-reports\TEST-*.xml) do (
 )
 
 if defined REPORT_PATH (
-    echo Found test report: %REPORT_PATH%
+    echo Found test report: !REPORT_PATH!
     curl --location --request POST ^
       "https://eu.api.zephyrscale.smartbear.com/v2/automations/executions/junit?projectKey=SCRUM" ^
       --header "Authorization: Bearer %ZEPHYR_TOKEN%" ^
-      --form "file=@%REPORT_PATH%" ^
+      --form "file=@!REPORT_PATH!" ^
       --form "autoCreateTestCases=true"
 ) else (
     echo ERROR: No test report found in target\surefire-reports\

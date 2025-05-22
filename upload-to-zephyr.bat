@@ -2,8 +2,6 @@
 echo Uploading report to Zephyr...
 
 REM The ZEPHYR_TOKEN environment variable is provided by Jenkins' withCredentials block.
-REM It should NOT be set or hardcoded here, as doing so will overwrite the token
-REM passed securely by Jenkins.
 
 REM Look for any Surefire report in target/surefire-reports
 for %%f in (target\surefire-reports\TEST-*.xml) do (
@@ -13,7 +11,7 @@ for %%f in (target\surefire-reports\TEST-*.xml) do (
 REM Upload only if report file is found
 if defined REPORT_PATH (
     echo Found test report: %REPORT_PATH%
-    curl -X POST https://eu.api.zephyrscale.smartbear.com/v2/automations/executions/junit ^
+    curl -X POST "https://eu.api.zephyrscale.smartbear.com/v2/automations/executions/junit?projectKey=SCRUM" ^
       -H "Authorization: Bearer %ZEPHYR_TOKEN%" ^
       -H "Content-Type: multipart/form-data" ^
       -F "file=@%REPORT_PATH%"

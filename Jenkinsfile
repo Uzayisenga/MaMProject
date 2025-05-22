@@ -1,12 +1,11 @@
 pipeline {
     agent any
 
-    environment {
-        ZEPHYR_TOKEN = credentials('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb250ZXh0Ijp7ImJhc2VVcmwiOiJodHRwczovL3Rlc3RtYW1hcHAuYXRsYXNzaWFuLm5ldCIsInVzZXIiOnsiYWNjb3VudElkIjoiNzEyMDIwOmE4MDJjZmJiLWJhN2YtNDNhNi1hMWUwLTA3ZWE0ZjA5MTdlYiIsInRva2VuSWQiOiJmYTJjYjY2Zi0wZmRjLTQzY2YtODAyMC1mZDJkNWViZjQ3MGMifX0sImlzcyI6ImNvbS5rYW5vYWgudGVzdC1tYW5hZ2VyIiwic3ViIjoiMjIxZjQyMGMtZjJkNC0zYzQwLTg1OTQtMjU3MzFmZWQyZjY2IiwiZXhwIjoxNzc5NDQwMjQ0LCJpYXQiOjE3NDc5MDQyNDR9.f2PYCYXa5rll47jta7uwQBdUN9W3pP8ulxHaxYAn3XU')
-    }
+    // Remove the 'environment' block that hardcodes the token.
+    // Secrets should be managed securely via Jenkins Credentials.
 
     stages {
-        stage('Checkout') {
+        stage('Checkout SCM') { // Renamed for clarity, matches log
             steps {
                 git 'https://github.com/Uzayisenga/MaMProject.git'
             }
@@ -20,7 +19,14 @@ pipeline {
 
         stage('Upload to Zephyr') {
             steps {
-                bat 'upload-to-zephyr.bat'
+                // Use withCredentials to securely fetch the token by its ID
+                // Replace 'your-zephyr-credential-id' with the actual ID
+                // you gave your secret text credential in Jenkins.
+                withCredentials([string(credentialsId: 'fa2cb66f-0fdc-43cf-8020-fd2d5ebf470c', variable: 'ZEPHYR_TOKEN')]) {
+                    // Inside this block, ZEPHYR_TOKEN is available as an environment variable
+                    // and will be automatically masked in the logs.
+                    bat 'upload-to-zephyr.bat'
+                }
             }
         }
     }

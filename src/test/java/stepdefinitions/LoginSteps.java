@@ -1,7 +1,8 @@
 package stepdefinitions;
 
 import io.cucumber.java.en.*;
-
+@Test
+@DisplayName("@ZephyrCase:SCRUM-T1")
 public class LoginSteps {
     @Given("the user is on the login page")
     public void userOnLoginPage() {
